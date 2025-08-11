@@ -1,7 +1,6 @@
 """ACDC: total 1356 samples; 30 samples for vadilation;
 57 iterations per epoch; max epoch: 527.
 """
-
 import argparse
 import logging
 import os
@@ -19,7 +18,7 @@ import torch.backends.cudnn as cudnn
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
-from torch.utils.tensorboard import SummaryWriter
+from tensorboardX import SummaryWriter
 from torch.nn.modules.loss import CrossEntropyLoss
 from torch.utils.data import DataLoader
 from torchvision import transforms
@@ -133,8 +132,8 @@ def train(args, snapshot_path):
     for epoch_num in iterator:
         for iter, sampled_batch in enumerate(trainloader):
 
-            img, label = sampled_batch['image'], sampled_batch['label']
-            img, label = img.cuda(), label.cuda()
+            img, label, gt = sampled_batch['image'], sampled_batch['label'], sampled_batch['gt']
+            img, label, gt = img.cuda(), label.cuda(), gt.cuda()
 
             outputs, outputs_aux1 = model(img)
             outputs_soft1 = torch.softmax(outputs, dim=1)
@@ -219,7 +218,7 @@ def train(args, snapshot_path):
 
 if __name__ == "__main__":
     args = parse_args()
-    snapshot_path = "../../model/{}_{}".format(args.data_name, args.exp)
+    snapshot_path = "../../checkpoints/{}_{}".format(args.data_name, args.exp)
     if not os.path.exists(snapshot_path):
         os.makedirs(snapshot_path)
 
