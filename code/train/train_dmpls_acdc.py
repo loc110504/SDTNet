@@ -27,7 +27,7 @@ from tqdm import tqdm
 from dataloader.acdc import BaseDataSets, RandomGenerator
 from networks.net_factory import net_factory
 from val_2D import test_all_case_2D
-from utils import losses, metrics, ramps
+from utils import losses
 
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
