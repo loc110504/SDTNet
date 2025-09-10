@@ -21,7 +21,7 @@ from torch.utils.data import DataLoader
 from torchvision import transforms
 from tqdm import tqdm
 
-from dataloader.acdc import BaseDataSets, RandomGenerator
+from dataloader.acdc import BaseDataSets_ScribbleVC, RandomGenerator
 from torchmetrics.classification import MultilabelAccuracy
 from tool import pyutils
 from utils.gate_crf_loss import ModelLossSemsegGatedCRF
@@ -118,14 +118,14 @@ def train(args, snapshot_path):
     model = create_model()
     
     # Create datasets
-    db_train = BaseDataSets(
+    db_train = BaseDataSets_ScribbleVC(
         base_dir=args.root_path, 
         split="train", 
         transform=transforms.Compose([RandomGenerator(args.patch_size)]), 
         fold=args.fold, 
         sup_type=args.sup_type
     )
-    db_val = BaseDataSets(base_dir=args.root_path, fold=args.fold, split="val")
+    db_val = BaseDataSets_ScribbleVC(base_dir=args.root_path, fold=args.fold, split="val")
 
     # Create dataloaders
     trainloader = DataLoader(
@@ -298,7 +298,7 @@ def train(args, snapshot_path):
                         model_type='val' if not args.no_class_rep else None
                     )
                     metric_list.append(metric_i)
-                
+            
                 metric_list = np.nanmean(np.array(metric_list), axis=0)
                 for class_i in range(num_classes - 1):
                     writer.add_scalar('info/val_{}_dice'.format(class_i + 1),

@@ -27,7 +27,6 @@ from tqdm import tqdm
 from dataloader.acdc import BaseDataSets, RandomGenerator
 from networks.net_factory import net_factory
 from val_2D import test_all_case_2D
-from utils import losses, metrics, ramps
 
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
@@ -41,7 +40,7 @@ def parse_args():
                         default='unet_cct', help='model_name, select: unet_cct, \
                             NestedUNet2d_2dual, swinunet_2dual')
     parser.add_argument('--exp', type=str,
-                        default='DMPLS', help='experiment_name')
+                        default='DMSPS_Stage1', help='experiment_name')
     parser.add_argument('--fold', type=str,
                         default='MAAGfold', help='cross validation fold')
     parser.add_argument('--sup_type', type=str,
@@ -49,7 +48,7 @@ def parse_args():
     parser.add_argument('--num_classes', type=int,  default=4,
                         help='output channel of network')
     parser.add_argument('--max_iterations', type=int,
-                        default=60000, help='maximum epoch number to train')
+                        default=30000, help='maximum epoch number to train')
     parser.add_argument('--ES_interval', type=int,
                         default=10000, help='maximum iteration iternal for early-stopping')
     parser.add_argument('--batch_size', type=int, default=8,
@@ -115,7 +114,7 @@ def train(args, snapshot_path):
     optimizer = optim.SGD(model.parameters(), lr=base_lr,
                           momentum=0.9, weight_decay=0.0001)
     ce_loss = CrossEntropyLoss(ignore_index=num_classes)
-    dice_loss = losses.pDLoss(num_classes, ignore_index=num_classes)
+    ce_loss2 = CrossEntropyLoss()
 
     writer = SummaryWriter(snapshot_path + '/log')
     logging.info("{} iterations per epoch".format(len(trainloader)))
@@ -146,14 +145,12 @@ def train(args, snapshot_path):
             loss_ce = 0.5 * (loss_ce1 + loss_ce2)
 
             # mix soft pseudo label
-            beta = random.random() + 1e-10
-            pseudo_supervision = torch.argmax(
-                (beta * outputs_soft1.detach() + (1.0-beta) * outputs_soft2.detach()), dim=1, keepdim=False)
-            loss_pse_sup = 0.5 * (dice_loss(outputs_soft1, pseudo_supervision.unsqueeze(
-                1)) + dice_loss(outputs_soft2, pseudo_supervision.unsqueeze(1)))
+            alpha = random.random() + 1e-10
+            soft_pseudo_label = alpha * outputs_soft1.detach() + (1.0-alpha) * outputs_soft2.detach()
+            loss_pse_sup_soft = 0.5*(ce_loss2(outputs_soft1, soft_pseudo_label) + ce_loss2(outputs_soft2, soft_pseudo_label))
 
             # total loss
-            loss = loss_ce + 0.5 * loss_pse_sup
+            loss = loss_ce + 8.0 * loss_pse_sup_soft
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
@@ -166,13 +163,13 @@ def train(args, snapshot_path):
             writer.add_scalar('info/lr', lr_, iter_num)
             writer.add_scalar('info/total_loss', loss, iter_num)
             writer.add_scalar('info/loss_ce', loss_ce, iter_num)
-            writer.add_scalar('info/loss_pse_sup', loss_pse_sup, iter_num)
-
+            writer.add_scalar('info/loss_pse_sup_soft',loss_pse_sup_soft,iter_num)
+            
             # Validation
             if iter_num > 0 and iter_num % 200 == 0:
                 logging.info(
-                    'iteration %d : loss : %f, loss_ce: %f, loss_pse_sup_soft: %f' 
-                    %(iter_num, loss.item(), loss_ce.item(), loss_pse_sup.item()))
+                    'iteration %d : loss : %f, loss_ce: %f, loss_pse_sup_soft: %f, alpha: %f' 
+                    %(iter_num, loss.item(), loss_ce.item(), loss_pse_sup_soft.item(), alpha))
                 
                 model.eval()
                 metric_list = test_all_case_2D(valloader, model, args)

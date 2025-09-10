@@ -7,6 +7,7 @@ import torch.nn as nn
 from matplotlib import pyplot as plt
 
 import torch.nn.functional as F
+
 def Jigsaw(imgs, num_x, num_y, shuffle_index=None):
     split_w, split_h = int(imgs.shape[2] / num_x), int(imgs.shape[3] / num_y)
     out_imgs = torch.zeros_like(imgs)
@@ -127,6 +128,7 @@ def Cutout_max(imgs, labels, device, n_holes=1):
     labels_out = torch.stack(labels_list)
 
     return imgs_out, labels_out
+
 def Cutout_min(imgs, labels, device, n_holes=1):
     h = imgs.shape[2]
     w = imgs.shape[3]

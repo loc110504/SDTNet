@@ -3,7 +3,7 @@ import os
 import random
 import re
 from glob import glob
-
+import pandas as pd
 import cv2
 import h5py
 import numpy as np
@@ -35,7 +35,7 @@ def pseudo_label_generator_acdc(data, seed, beta=100, mode='bf'):
         pseudo_label = segmentation - 1
     return pseudo_label
 
-
+# ACDC Dataset Loader
 class BaseDataSets(Dataset):
     """
     Base class for ACDC dataset loader. Choose the suitable fold and split
@@ -159,6 +159,139 @@ class BaseDataSets(Dataset):
             sample = {'image': image, 'label': label}
         sample["idx"] = idx
         return sample
+    
+
+# ACDC Dataset Loader for ScribbleVC
+class BaseDataSets_ScribbleVC(Dataset):
+    """
+    Base class for ACDC dataset loader. Choose the suitable fold and split
+    """
+    def __init__(self, base_dir=None, split='train', transform=None, fold="fold1", sup_type="label"):
+        self._base_dir = base_dir
+        self.sample_list = []
+        self.split = split
+        self.sup_type = sup_type
+        self.transform = transform
+        self.category_list = pd.read_excel(self._base_dir + '/slice_classification_ACDC.xlsx')
+        self.category_list.set_index('slice', inplace=True)
+        self.category_list = self.category_list.astype(bool)
+        train_ids, test_ids = self._get_fold_ids(fold)
+
+        if self.split == 'train':
+            self.all_slices = os.listdir(
+                self._base_dir + "/ACDC_training_slices")
+            self.sample_list = []
+            for ids in train_ids:
+                new_data_list = list(filter(lambda x: re.match(
+                    '{}.*'.format(ids), x) != None, self.all_slices))
+                self.sample_list.extend(new_data_list)
+
+        elif self.split == 'val':
+            self.all_volumes = os.listdir(
+                self._base_dir + "/ACDC_training_volumes")
+            self.sample_list = []
+            for ids in test_ids:
+                new_data_list = list(filter(lambda x: re.match(
+                    '{}.*'.format(ids), x) != None, self.all_volumes))
+                self.sample_list.extend(new_data_list)
+
+        # if num is not None and self.split == "train":
+        #     self.sample_list = self.sample_list[:num]
+        print("total {} samples".format(len(self.sample_list)))
+
+    def _get_fold_ids(self, fold):
+        """
+        Fold1:
+            - Training: patient021 to patient100
+            - Testing: patient001 to patient020
+        """
+        all_cases_set = ["patient{:0>3}".format(i) for i in range(1, 101)]
+        fold1_testing_set = [
+            "patient{:0>3}".format(i) for i in range(1, 21)]
+        fold1_training_set = [
+            i for i in all_cases_set if i not in fold1_testing_set]
+        fold2_testing_set = [
+            "patient{:0>3}".format(i) for i in range(21, 41)]
+        fold2_training_set = [
+            i for i in all_cases_set if i not in fold2_testing_set]
+
+        fold3_testing_set = [
+            "patient{:0>3}".format(i) for i in range(41, 61)]
+        fold3_training_set = [
+            i for i in all_cases_set if i not in fold3_testing_set]
+
+        fold4_testing_set = [
+            "patient{:0>3}".format(i) for i in range(61, 81)]
+        fold4_training_set = [
+            i for i in all_cases_set if i not in fold4_testing_set]
+
+        fold5_testing_set = [
+            "patient{:0>3}".format(i) for i in range(81, 101)]
+        fold5_training_set = [
+            i for i in all_cases_set if i not in fold5_testing_set]
+        if fold == "fold1":
+            return [fold1_training_set, fold1_testing_set]
+        elif fold == "fold2":
+            return [fold2_training_set, fold2_testing_set]
+        elif fold == "fold3":
+            return [fold3_training_set, fold3_testing_set]
+        elif fold == "fold4":
+            return [fold4_training_set, fold4_testing_set]
+        elif fold == "fold5":
+            return [fold5_training_set, fold5_testing_set]
+        elif fold == "MAAGfold":
+            training_set = ["patient{:0>3}".format(i) for i in [37, 50, 53, 100, 38, 19, 61, 74, 97, 31, 91, 35, 56, 94, 26, 69, 46, 59, 4, 89,
+                                71, 6, 52, 43, 45, 63, 93, 14, 98, 88, 21, 28, 99, 54, 90]]
+            validation_set = ["patient{:0>3}".format(i) for i in [84, 32, 27, 96, 17, 18, 57, 81, 79, 22, 1, 44, 49, 25, 95]]
+            return [training_set, validation_set]
+        elif fold == "MAAGfold70":
+            training_set = ["patient{:0>3}".format(i) for i in [37, 50, 53, 100, 38, 19, 61, 74, 97, 31, 91, 35, 56, 94, 26, 69, 46, 59, 4, 89,
+                                71, 6, 52, 43, 45, 63, 93, 14, 98, 88, 21, 28, 99, 54, 90, 2, 76, 34, 85, 70, 86, 3, 8, 51, 40, 7, 13, 47, 55, 12, 58, 87, 9, 65, 62, 33, 42,
+                               23, 92, 29, 11, 83, 68, 75, 67, 16, 48, 66, 20, 15]]
+            validation_set = ["patient{:0>3}".format(i) for i in [84, 32, 27, 96, 17, 18, 57, 81, 79, 22, 1, 44, 49, 25, 95]]
+            return [training_set, validation_set]
+        elif "MAAGfold" in fold:
+            training_num = int(fold[8:])
+            training_set = sample(["patient{:0>3}".format(i) for i in [37, 50, 53, 100, 38, 19, 61, 74, 97, 31, 91, 35, 56, 94, 26, 69, 46, 59, 4, 89,
+                                71, 6, 52, 43, 45, 63, 93, 14, 98, 88, 21, 28, 99, 54, 90, 2, 76, 34, 85, 70, 86, 3, 8, 51, 40, 7, 13, 47, 55, 12, 58, 87, 9, 65, 62, 33, 42,
+                               23, 92, 29, 11, 83, 68, 75, 67, 16, 48, 66, 20, 15]], training_num)
+            print("total {} training samples: {}".format(training_num, training_set))
+            validation_set = ["patient{:0>3}".format(i) for i in [84, 32, 27, 96, 17, 18, 57, 81, 79, 22, 1, 44, 49, 25, 95]]
+            return [training_set, validation_set]
+        else:
+            return "ERROR KEY"
+
+    def __len__(self):
+        return len(self.sample_list)
+
+    def __getitem__(self, idx):
+        case = self.sample_list[idx]
+        if self.split == "train":
+            h5f = h5py.File(self._base_dir +
+                            "/ACDC_training_slices/{}".format(case), 'r')
+        else:
+            h5f = h5py.File(self._base_dir +
+                            "/ACDC_training_volumes/{}".format(case), 'r')
+        # image = h5f['image'][:]
+        # label = h5f['label'][:]
+        # sample = {'image': image, 'label': label}
+        if self.split == "train":
+            image = h5f['image'][:]
+            if self.sup_type == "random_walker":
+                label = pseudo_label_generator_acdc(image, h5f["scribble"][:])
+            else:
+                label = h5f[self.sup_type][:]
+            sample = {'image': image, 'label': label, 'category': torch.from_numpy(self.category_list.loc[case].values)}
+            if self.transform:
+                category_backup = sample['category'].clone()
+                sample = self.transform(sample)
+                sample['category'] = category_backup
+        else:
+            image = h5f['image'][:]
+            label = h5f['label'][:]
+            sample = {'image': image, 'label': label.astype(np.int8)}
+        sample["idx"] = case
+        return sample
 
 
 def random_rot_flip(image, label):
@@ -254,3 +387,5 @@ def grouper(iterable, n):
     # grouper('ABCDEFG', 3) --> ABC DEF"
     args = [iter(iterable)] * n
     return zip(*args)
+
+
