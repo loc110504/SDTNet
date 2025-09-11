@@ -57,9 +57,6 @@ parser.add_argument('--gpu', type=str, default='0', help='GPU to use')
 args = parser.parse_args()
 os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
 
-def get_current_consistency_weight(epoch):
-    # Consistency ramp-up from https://arxiv.org/abs/1610.02242
-    return 1 * ramps.sigmoid_rampup(epoch, 40)
 
 def create_model(ema=False,num_classes=4):
     # Network definition
@@ -182,10 +179,10 @@ def train(args, snapshot_path):
             writer.add_scalar("train/loss_PL_dice", loss_PL.item(), iter_num)
             writer.add_scalar("train/loss_BD", loss_BD.item(), iter_num)
 
-            if iter_num % 200 == 0:
+            if iter_num % 400 == 0:
                 logging.info(
-                'iteration %d : loss : %f, loss_TAS: %f, loss_PL: %f, loss_BD: %f' %
-                (iter_num, loss.item(), loss_TAS.item(), loss_PL.item(), loss_BD.item())
+                'iteration %d : loss : %f, loss_TAS: %f, loss_PL: %f, loss_BD: %f' 
+                % (iter_num, loss.item(), loss_TAS.item(), loss_PL.item(), loss_BD.item()))
 
             if iter_num > 1 and iter_num % 400 == 0:
                 model.eval()
