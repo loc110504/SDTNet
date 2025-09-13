@@ -14,6 +14,12 @@ This repository provides re-implementations of some papers about scribble-superv
 | 7  | [ScribbleVS](https://arxiv.org/pdf/2411.10237)                                          | ArXiv 2024         | ✅                              |
 | 8  | [TABNet](https://arxiv.org/pdf/2507.02399)                                              | ArXiv 2025         |  ✅                    |
 
+### Benchmark on ACDC
+
+| Method   | LV Dice ↑ | LV HD95 ↓ | LV ASD ↓ | RV Dice ↑ | RV HD95 ↓ | RV ASD ↓ | Myo Dice ↑ | Myo HD95 ↓ | Myo ASD ↓ | **Mean Dice ↑** | **Mean HD95 ↓** | **Mean ASD ↓** |
+|----------|-----------|-----------|-----------|-----------|-----------|-----------|-------------|-------------|------------|-----------------|-----------------|----------------|
+| **TABNet** | 0.882   | 1.818     | 0.923     | 0.868     | 1.244     | 1.281     | 0.928       | 2.476       | 0.732      | 0.892           | 1.846           | 0.979          |
+
 
 ### Tasks
 - Fix bug ShapePU
