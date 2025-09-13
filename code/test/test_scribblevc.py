@@ -13,7 +13,7 @@ from medpy import metric
 from scipy.ndimage import zoom
 from scipy.ndimage.interpolation import zoom
 from tqdm import tqdm
-
+import importlib
 # from networks.efficientunet import UNet
 from networks.net_factory import net_factory
 np.bool = np.bool_
@@ -26,6 +26,11 @@ parser.add_argument('--model', type=str,
                     default='unet_cct', help='model_name')
 parser.add_argument('--num_classes', type=int,  default=4,
                     help='output channel of network')
+parser.add_argument("--network", default="networks.scribblevc", type=str)
+parser.add_argument("--train_epochs", default="best", type=str)
+parser.add_argument('--linear_layer', action="store_true", help='linear layer')
+parser.add_argument('--bilinear', action="store_false", help='use bilinear in Upsample layers')
+parser.add_argument('--save_prediction', action="store_true", help='save predictions while testing')
 
 
 def calculate_metric_percase(pred, gt):
@@ -50,14 +55,10 @@ def test_single_volume(case, net, test_save_path, FLAGS):
             0).unsqueeze(0).float().cuda()
         net.eval()
         with torch.no_grad():
-            if FLAGS.model == "unet_cct":
-                out_main, _ = net(input)
-            elif FLAGS.model == "scribformer":
-                pass
-            else:
-                out_main = net(input)
-            out = torch.argmax(torch.softmax(
-                out_main, dim=1), dim=1).squeeze(0)
+            out_aux1, out_aux2 = net(input)[0], net(input)[1]
+            out_aux1_soft = torch.softmax(out_aux1, dim=1)
+            out_aux2_soft = torch.softmax(out_aux2, dim=1)
+            out = torch.argmax((out_aux1_soft+out_aux2_soft)*0.5, dim=1).squeeze(0)
             out = out.cpu().detach().numpy()
             pred = zoom(out, (x / 256, y / 256), order=0)
             prediction[ind] = pred
@@ -83,16 +84,15 @@ def Inference(FLAGS):
         image_list = f.readlines()
     image_list = sorted([item.replace('\n', '').split(".")[0]
                          for item in image_list])
-    save_mode_path = "../../checkpoints/ACDC_DMSPS1/unet_cct_best_model.pth"
+    save_mode_path = "../../checkpoints/ACDC_ScribbleVC/scribbleVC_best_model.pth"
     test_save_path = "../../results/ACDC_ScribbleVS"
     if os.path.exists(test_save_path):
         shutil.rmtree(test_save_path)
     os.makedirs(test_save_path)
-    net = net_factory(net_type=FLAGS.model, in_chns=1,
-                      class_num=FLAGS.num_classes)
+    net = getattr(importlib.import_module(FLAGS.network), 'scribbleVC_ACDC')(linear_layer=FLAGS.linear_layer, bilinear=FLAGS.bilinear)
     net.load_state_dict(torch.load(save_mode_path))
-    print("init weight from {}".format(save_mode_path))
     net.eval()
+    net.cuda()
 
     first_total = 0.0
     second_total = 0.0

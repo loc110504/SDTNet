@@ -6,12 +6,9 @@ from pathlib import Path
 ROOT = Path("../../data/ACDC/ACDC_training_volumes")   # đổi nếu thư mục khác
 OUT_FILE = "test.txt"
 
-# danh sách bệnh nhân cần lấy
-patients = [
-    "patient001","patient017","patient018","patient022","patient025",
-    "patient027","patient032","patient044","patient049","patient057",
-    "patient079","patient081","patient084","patient095","patient096",
-]
+# danh sách bệnh nhân cần lấy (chuyển hết về dạng 'patientXXX')
+patient_ids = [5, 39, 77, 82, 78, 10, 64, 24, 30, 73, 80, 41, 36, 60, 72]
+patients = [f"patient{pid:03d}" for pid in patient_ids] + ["patient005","patient039"]
 
 # ======= hàm hỗ trợ =======
 pat_set = set(patients)

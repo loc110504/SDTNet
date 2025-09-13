@@ -7,30 +7,26 @@ This repository provides re-implementations of some papers about scribble-superv
 1. [DMPLS](https://arxiv.org/pdf/2203.02106) — *MICCAI 2022*  
    ✅ Status: Done  
 
-2. [ShapePU](https://arxiv.org/pdf/2206.02118) — *MICCAI 2022*  
-   ⚠️ Status: Bug  
-
-3. [UAMT](https://www.sciencedirect.com/science/article/pii/S0031320321005215) — *Pattern Recognition 2022*  
-   ✅ Status: Code done, not yet run  
-
-4. [ScribbleVC](https://arxiv.org/pdf/2307.16226) — *ACM MM 2023*  
+2. [ScribbleVC](https://arxiv.org/pdf/2307.16226) — *ACM MM 2023*  
    ✅ Status: Done  
 
-5. [ScribFormer](https://arxiv.org/pdf/2402.02029) — *IEEE TMI 2024*  
+3. [ScribFormer](https://arxiv.org/pdf/2402.02029) — *IEEE TMI 2024*  
    ✅ Status: Done  
 
-6. [DMSPS](https://www.sciencedirect.com/science/article/abs/pii/S1361841524001993?dgcid=author) — *MedIA 2024*  
+4. [DMSPS](https://www.sciencedirect.com/science/article/abs/pii/S1361841524001993?dgcid=author) — *MedIA 2024*  
    ✅ Status: Stage1 done, Stage2 pending  
 
-7. [ScribbleVS](https://arxiv.org/pdf/2411.10237) — *arXiv 2024*  
+5. [ScribbleVS](https://arxiv.org/pdf/2411.10237) — *arXiv 2024*  
    ✅ Status: Done  
 
-8. [TABNet](https://arxiv.org/pdf/2507.02399) — *arXiv 2025*  
+6. [AIL](https://ieeexplore.ieee.org/abstract/document/10851813) - *IEEE TIP 2025*
+
+7. [TABNet](https://arxiv.org/pdf/2507.02399) — *arXiv 2025*  
    ✅ Status: Done  
 
 
 ## 📊  Benchmark on ACDC
-
+<h2>📊 Quantitative Results on ACDC (Dice % / HD95 mm)</h2>
 
 <table style="border-collapse: collapse; text-align: center;">
   <thead>
@@ -45,41 +41,49 @@ This repository provides re-implementations of some papers about scribble-superv
   <tbody>
     <tr>
       <td style="border: 1px solid black; padding: 6px;"><b>TABNet</b></td>
-      <td style="border: 1px solid black; padding: 6px;">88.18 / 1.82</td>
-      <td style="border: 1px solid black; padding: 6px;">86.78 / 1.24</td>
-      <td style="border: 1px solid black; padding: 6px;">92.78 / 2.48</td>
-      <td style="border: 1px solid black; padding: 6px;"><b>89.25 / 1.85</b></td>
+      <td style="border: 1px solid black; padding: 6px;">87.55 / 1.49</td>
+      <td style="border: 1px solid black; padding: 6px;">88.87 / 5.10</td>
+      <td style="border: 1px solid black; padding: 6px;">92.65 / 6.47</td>
+      <td style="border: 1px solid black; padding: 6px;"><b>89.69 / 4.35</b></td>
     </tr>
     <tr>
       <td style="border: 1px solid black; padding: 6px;"><b>ScribbleVS</b></td>
-      <td style="border: 1px solid black; padding: 6px;">87.97 / 1.47</td>
-      <td style="border: 1px solid black; padding: 6px;">86.17 / 5.17</td>
-      <td style="border: 1px solid black; padding: 6px;">92.80 / 1.21</td>
-      <td style="border: 1px solid black; padding: 6px;">88.98 / 2.62</td>
+      <td style="border: 1px solid black; padding: 6px;">88.79 / 1.32</td>
+      <td style="border: 1px solid black; padding: 6px;">88.70 / 1.14</td>
+      <td style="border: 1px solid black; padding: 6px;">93.13 / 1.16</td>
+      <td style="border: 1px solid black; padding: 6px;"><b>90.21 / 1.21</b></td>
     </tr>
     <tr>
       <td style="border: 1px solid black; padding: 6px;"><b>DMSPS</b></td>
-      <td style="border: 1px solid black; padding: 6px;">87.98 / 1.50</td>
-      <td style="border: 1px solid black; padding: 6px;">85.07 / 5.90</td>
-      <td style="border: 1px solid black; padding: 6px;">92.31 / 6.55</td>
-      <td style="border: 1px solid black; padding: 6px;">88.45 / 4.65</td>
+      <td style="border: 1px solid black; padding: 6px;">87.83 / 2.09</td>
+      <td style="border: 1px solid black; padding: 6px;">87.39 / 1.21</td>
+      <td style="border: 1px solid black; padding: 6px;">92.54 / 1.23</td>
+      <td style="border: 1px solid black; padding: 6px;">89.25 / 1.51</td>
     </tr>
     <tr>
       <td style="border: 1px solid black; padding: 6px;"><b>DMPLS</b></td>
-      <td style="border: 1px solid black; padding: 6px;">87.17 / 1.76</td>
-      <td style="border: 1px solid black; padding: 6px;">84.22 / 9.31</td>
-      <td style="border: 1px solid black; padding: 6px;">91.69 / 6.60</td>
-      <td style="border: 1px solid black; padding: 6px;">87.69 / 5.89</td>
+      <td style="border: 1px solid black; padding: 6px;">87.27 / 1.38</td>
+      <td style="border: 1px solid black; padding: 6px;">87.13 / 1.31</td>
+      <td style="border: 1px solid black; padding: 6px;">92.20 / 4.87</td>
+      <td style="border: 1px solid black; padding: 6px;">88.87 / 2.52</td>
     </tr>
+    <tr>
+      <td style="border: 1px solid black; padding: 6px;"><b>ScribbleVC</b></td>
+      <td style="border: 1px solid black; padding: 6px;">84.92 / 1.55</td>
+      <td style="border: 1px solid black; padding: 6px;">85.50 / 1.46</td>
+      <td style="border: 1px solid black; padding: 6px;">91.05 / 2.05</td>
+      <td style="border: 1px solid black; padding: 6px;">87.16 / 1.68</td>
+    </tr>
+
   </tbody>
 </table>
 
 
 
 
-
 ### Tasks
 - Test ScribbleVC, Scribformer, DMSPS stage2
+- Run AIL
 
 ### Acknowledgement
 This repo partially uses code from [Hilab-WSL4MIS](https://github.com/HiLab-git/WSL4MIS) and [ShapePU](https://github.com/BWGZK/ShapePU)
