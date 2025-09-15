@@ -44,7 +44,7 @@ if __name__ == '__main__':
     parser.add_argument('--patch_size', type=list, default=[256, 256],
                         help='patch size of network input')
     parser.add_argument('--fold', type=str,
-                        default='MAAGfold', help='cross validation')
+                        default='MAAGfold70', help='cross validation')
     parser.add_argument('--sup_type', type=str,
                         default='scribble', help='supervision type')
     parser.add_argument('--seed', type=int, default=2022, help='random seed')

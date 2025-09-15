@@ -36,7 +36,7 @@ parser.add_argument('--exp', type=str,
 parser.add_argument('--data', type=str,
                     default='ACDC', help='experiment_name')
 parser.add_argument('--fold', type=str,
-                    default='MAAGfold', help='cross validation')
+                    default='MAAGfold70', help='cross validation')
 parser.add_argument('--sup_type', type=str,
                     default='scribble', help='supervision type')
 parser.add_argument('--model', type=str,

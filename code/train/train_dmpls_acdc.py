@@ -43,7 +43,7 @@ def parse_args():
     parser.add_argument('--exp', type=str,
                         default='DMPLS', help='experiment_name')
     parser.add_argument('--fold', type=str,
-                        default='MAAGfold', help='cross validation fold')
+                        default='MAAGfold70', help='cross validation fold')
     parser.add_argument('--sup_type', type=str,
                         default='scribble', help='supervision type')
     parser.add_argument('--num_classes', type=int,  default=4,

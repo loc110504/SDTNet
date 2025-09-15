@@ -71,6 +71,11 @@ This repository provides re-implementations of some papers about scribble-superv
   </tbody>
 </table>
 
+- chạy thêm ACDC, MSCMRseg
+- đọc kĩ ScribbleVS
+- slide mô tả chi tiết ScribbleVS
+- thiết kế thực nghiệm ablation
+
 
 <!-- 
 

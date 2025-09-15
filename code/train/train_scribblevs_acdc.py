@@ -34,7 +34,7 @@ parser.add_argument('--data', type=str,
 parser.add_argument('--tau', type=float,
                     default=0.5, help='experiment_name')
 parser.add_argument('--fold', type=str,
-                    default='MAAGfold', help='cross validation')
+                    default='MAAGfold70', help='cross validation')
 parser.add_argument('--sup_type', type=str,
                     default='scribble', help='supervision type')
 parser.add_argument('--model', type=str,
