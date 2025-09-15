@@ -72,11 +72,11 @@ This repository provides re-implementations of some papers about scribble-superv
 </table>
 
 
-
+<!-- 
 
 ### Tasks
 - Test ScribbleVC, Scribformer, DMSPS stage2
 - Run AIL
 
 ### Acknowledgement
-This repo partially uses code from [Hilab-WSL4MIS](https://github.com/HiLab-git/WSL4MIS) and [ShapePU](https://github.com/BWGZK/ShapePU)
+This repo partially uses code from [Hilab-WSL4MIS](https://github.com/HiLab-git/WSL4MIS) and [ShapePU](https://github.com/BWGZK/ShapePU) -->
