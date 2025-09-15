@@ -4,29 +4,22 @@ This repository provides re-implementations of some papers about scribble-superv
 
 ## Related Papers
 
-1. [DMPLS](https://arxiv.org/pdf/2203.02106) — *MICCAI 2022*  
-   ✅ Status: Done  
+1. [DMPLS](https://arxiv.org/pdf/2203.02106) — *MICCAI 2022*  ✅ 
 
-2. [ScribbleVC](https://arxiv.org/pdf/2307.16226) — *ACM MM 2023*  
-   ✅ Status: Done  
+2. [ScribbleVC](https://arxiv.org/pdf/2307.16226) — *ACM MM 2023*  ✅
 
-3. [ScribFormer](https://arxiv.org/pdf/2402.02029) — *IEEE TMI 2024*  
-   ✅ Status: Done  
+3. [ScribFormer](https://arxiv.org/pdf/2402.02029) — *IEEE TMI 2024*  ✅
 
-4. [DMSPS](https://www.sciencedirect.com/science/article/abs/pii/S1361841524001993?dgcid=author) — *MedIA 2024*  
-   ✅ Status: Stage1 done, Stage2 pending  
+4. [DMSPS](https://www.sciencedirect.com/science/article/abs/pii/S1361841524001993?dgcid=author) — *MedIA 2024*  ✅ 
 
-5. [ScribbleVS](https://arxiv.org/pdf/2411.10237) — *arXiv 2024*  
-   ✅ Status: Done  
+5. [ScribbleVS](https://arxiv.org/pdf/2411.10237) — *arXiv 2024*  ✅ 
 
-6. [AIL](https://ieeexplore.ieee.org/abstract/document/10851813) - *IEEE TIP 2025*
+6. [AIL](https://ieeexplore.ieee.org/abstract/document/10851813) - *IEEE TIP 2025* Fix bug, not run
 
-7. [TABNet](https://arxiv.org/pdf/2507.02399) — *arXiv 2025*  
-   ✅ Status: Done  
+7. [TABNet](https://arxiv.org/pdf/2507.02399) — *arXiv 2025* ✅
 
 
 ## 📊  Benchmark on ACDC
-<h2>📊 Quantitative Results on ACDC (Dice % / HD95 mm)</h2>
 
 <table style="border-collapse: collapse; text-align: center;">
   <thead>
