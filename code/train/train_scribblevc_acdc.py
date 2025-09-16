@@ -44,8 +44,8 @@ parser.add_argument('--model', type=str,
 parser.add_argument('--num_classes', type=int, default=4,
                     help='output channel of network')
 parser.add_argument('--max_iterations', type=int,
-                    default=30000, help='maximum epoch number to train')
-parser.add_argument('--batch_size', type=int, default=6,
+                    default=60000, help='maximum epoch number to train')
+parser.add_argument('--batch_size', type=int, default=8,
                     help='batch_size per gpu')
 parser.add_argument('--deterministic', type=int, default=1,
                     help='whether use deterministic training')
@@ -65,7 +65,7 @@ parser.add_argument("--session_name", default="TransCAM", type=str)
 parser.add_argument("--crop_size", default=512, type=int)
 parser.add_argument("--pretrain_weights", default='', type=str)
 parser.add_argument("--tblog", default='ACDC/scribbleVC', type=str)
-parser.add_argument('--optimizer', type=str, default='adamw', help='optimizer name')
+parser.add_argument('--optimizer', type=str, default='SGD', help='optimizer name')
 parser.add_argument('--lrdecay', action="store_true", help='lr decay')
 parser.add_argument('--linear_layer', action="store_true", help='linear layer')
 parser.add_argument('--bilinear', action="store_false", help='use bilinear in Upsample layer')
