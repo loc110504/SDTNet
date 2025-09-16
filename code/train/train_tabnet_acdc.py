@@ -32,8 +32,6 @@ parser.add_argument('--exp', type=str,
                     default='TABNet', help='experiment_name')
 parser.add_argument('--data', type=str,
                     default='ACDC', help='experiment_name')
-parser.add_argument('--tau', type=float,
-                    default=0.5, help='experiment_name')
 parser.add_argument('--fold', type=str,
                     default='MAAGfold70', help='cross validation')
 parser.add_argument('--sup_type', type=str,
@@ -43,7 +41,7 @@ parser.add_argument('--model', type=str,
 parser.add_argument('--num_classes', type=int,  default=4,
                     help='output channel of network')
 parser.add_argument('--max_iterations', type=int,
-                    default=30000, help='maximum epoch number to train')
+                    default=60000, help='maximum epoch number to train')
 parser.add_argument('--batch_size', type=int, default=8,
                     help='batch_size per gpu')
 parser.add_argument('--deterministic', type=int,  default=1,

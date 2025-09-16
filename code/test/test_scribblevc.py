@@ -83,7 +83,7 @@ def Inference(FLAGS):
     with open(FLAGS.root_path + '/test.txt', 'r') as f:
         image_list = f.readlines()
     image_list = sorted([item.replace('\n', '').split(".")[0]
-                         for item in image_list])
+                         for item in image_list]) 
     save_mode_path = "../../checkpoints/ACDC_ScribbleVC/scribbleVC_best_model.pth"
     test_save_path = "../../results/ACDC_ScribbleVS"
     if os.path.exists(test_save_path):

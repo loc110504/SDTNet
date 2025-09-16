@@ -3,24 +3,25 @@ import re
 from pathlib import Path
 
 # ======= cấu hình =======
-ROOT = Path("../../data/ACDC/ACDC_training_volumes")   # đổi nếu thư mục khác
+ROOT = Path("../../data/MSCMR/MSCMR_training_volumes")   # đổi nếu thư mục khác
 OUT_FILE = "test.txt"
 
 # danh sách bệnh nhân cần lấy (chuyển hết về dạng 'patientXXX')
-patient_ids = [5, 39, 77, 82, 78, 10, 64, 24, 30, 73, 80, 41, 36, 60, 72]
-patients = [f"patient{pid:03d}" for pid in patient_ids] + ["patient005","patient039"]
+patient_ids = [10, 11, 12, 16, 17, 23, 28, 30, 33, 35, 38, 3, 40, 43, 5]
+
+patients = [f"patient{pid:03d}" for pid in patient_ids]
 
 # ======= hàm hỗ trợ =======
 pat_set = set(patients)
-fname_re = re.compile(r"^(patient\d{3})_frame(\d+)\.h5$", re.IGNORECASE)
+fname_re = re.compile(r"^(patient\d{3})\.h5$", re.IGNORECASE)
 
 def natural_key(name: str):
     """sắp xếp theo (patientID, frame số)"""
     m = fname_re.match(name)
     if not m:
         return (name, 10**9)  # đẩy các tên lạ xuống cuối
-    pid, fr = m.group(1), int(m.group(2))
-    return (pid, fr)
+    pid = m.group(1)
+    return (pid, 0)
 
 # ======= quét & lọc =======
 if not ROOT.exists():

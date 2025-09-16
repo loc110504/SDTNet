@@ -19,11 +19,11 @@ from networks.net_factory import net_factory
 np.bool = np.bool_
 parser = argparse.ArgumentParser()
 parser.add_argument('--root_path', type=str,
-                    default='../../data/ACDC', help='Name of Experiment')
+                    default='../../data/MSCMR', help='Name of Experiment')
 parser.add_argument('--exp', type=str,
-                    default='ACDC/Fully_Supervised', help='experiment_name')
+                    default='MSCMR/Fully_Supervised', help='experiment_name')
 parser.add_argument('--model', type=str,
-                    default='unet_cct', help='model_name')
+                    default='unet', help='model_name')
 parser.add_argument('--num_classes', type=int,  default=4,
                     help='output channel of network')
 
@@ -38,7 +38,7 @@ def calculate_metric_percase(pred, gt):
 
 
 def test_single_volume(case, net, test_save_path, FLAGS):
-    h5f = h5py.File(FLAGS.root_path + "/ACDC_training_volumes/{}.h5".format(case), 'r')
+    h5f = h5py.File(FLAGS.root_path + "/MSCMR_training_volumes/{}.h5".format(case), 'r')
     image = h5f['image'][:]
     label = h5f['label'][:]
     prediction = np.zeros_like(label)
@@ -52,8 +52,6 @@ def test_single_volume(case, net, test_save_path, FLAGS):
         with torch.no_grad():
             if FLAGS.model == "unet_cct":
                 out_main, _ = net(input)
-            elif FLAGS.model == "scribformer":
-                pass
             else:
                 out_main = net(input)
             out = torch.argmax(torch.softmax(
@@ -83,8 +81,8 @@ def Inference(FLAGS):
         image_list = f.readlines()
     image_list = sorted([item.replace('\n', '').split(".")[0]
                          for item in image_list])
-    save_mode_path = "../../checkpoints/ACDC_DMSPS1/unet_cct_best_model.pth"
-    test_save_path = "../../results/ACDC_ScribbleVS"
+    save_mode_path = "../../checkpoints/MSCMR_TABNet/unet_best_model.pth"
+    test_save_path = "../../results/MSCMR_DMSPS1"
     if os.path.exists(test_save_path):
         shutil.rmtree(test_save_path)
     os.makedirs(test_save_path)
@@ -112,4 +110,5 @@ if __name__ == '__main__':
     FLAGS = parser.parse_args()
     metric = Inference(FLAGS)
     print(metric)
+    print("RV:", metric[0], " | Myo:", metric[1], " | LV:", metric[2])
     print((metric[0]+metric[1]+metric[2])/3)
