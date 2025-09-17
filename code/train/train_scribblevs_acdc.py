@@ -132,7 +132,6 @@ def train(args, snapshot_path):
 
     for epoch_num in iterator:
         for i_batch, sampled_batch in enumerate(trainloader):
-
             volume_batch, label_batch = sampled_batch['image'], sampled_batch['label']
             volume_batch, label_batch = volume_batch.cuda(), label_batch.cuda()
 
