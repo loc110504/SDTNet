@@ -19,18 +19,18 @@ from torch.utils.data import DataLoader
 from torchvision import transforms
 from tqdm import tqdm
 
-from dataloader.acdc import BaseDataSets, RandomGenerator
+from dataloader.mscmr import MSCMRDataSets, RandomGenerator
 from networks.net_factory import net_factory
 from utils import losses, ramps
 from val import test_single_volume_scribblevs
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--root_path', type=str,
-                    default='../../data/ACDC', help='Name of Experiment')
+                    default='../../data/MSCMR', help='Name of Experiment')
 parser.add_argument('--exp', type=str,
-                    default='ScribbleVS', help='experiment_name')
+                    default='MSCMR_ScribbleVS', help='experiment_name')
 parser.add_argument('--data', type=str,
-                    default='ACDC', help='experiment_name')
+                    default='MSCMR', help='experiment_name')
 parser.add_argument('--tau', type=float,
                     default=0.5, help='experiment_name')
 parser.add_argument('--fold', type=str,
@@ -58,7 +58,7 @@ os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
 
 def get_current_consistency_weight(epoch):
     # Consistency ramp-up from https://arxiv.org/abs/1610.02242
-    return 1 * ramps.sigmoid_rampup(epoch, 40)
+    return 1 * ramps.sigmoid_rampup(epoch, 20)
 
 def create_model(ema=False,num_classes=4):
     # Network definition
@@ -101,10 +101,10 @@ def train(args, snapshot_path):
     model = create_model(ema=False,num_classes=4)
     model_ema = create_model(ema=True, num_classes=4)
 
-    db_train = BaseDataSets(base_dir=args.root_path, split="train", transform=transforms.Compose([
+    db_train = MSCMRDataSets(base_dir=args.root_path, split="train", transform=transforms.Compose([
         RandomGenerator(args.patch_size)
-    ]), fold=args.fold, sup_type=args.sup_type)
-    db_val = BaseDataSets(base_dir=args.root_path, fold=args.fold, split="val")
+    ]), sup_type=args.sup_type)
+    db_val = MSCMRDataSets(base_dir=args.root_path, split="val")
 
     def worker_init_fn(worker_id):
         random.seed(args.seed + worker_id)
@@ -123,7 +123,6 @@ def train(args, snapshot_path):
 
     writer = SummaryWriter(snapshot_path + '/log')
     logging.info("{} iterations per epoch".format(len(trainloader)))
-    print(len(trainloader))
 
     iter_num = 0
     max_epoch = max_iterations // len(trainloader) + 1
@@ -133,6 +132,7 @@ def train(args, snapshot_path):
 
     for epoch_num in iterator:
         for i_batch, sampled_batch in enumerate(trainloader):
+
             volume_batch, label_batch = sampled_batch['image'], sampled_batch['label']
             volume_batch, label_batch = volume_batch.cuda(), label_batch.cuda()
 
@@ -153,7 +153,7 @@ def train(args, snapshot_path):
                 loss_pseudo_ce = ce_loss(outputs, pseudo_label_stu[:].long())
                 loss_pseudo_dc = dice_loss(outputs_soft1, pseudo_label_stu.unsqueeze(1))
 
-            consistency_weight = get_current_consistency_weight(iter_num // 300)  #150
+            consistency_weight = get_current_consistency_weight(iter_num // len(trainloader))  #150
             loss_pse_sup = (loss_pseudo_dc+loss_pseudo_ce)*0.5*consistency_weight
             loss = loss_ce + loss_pse_sup
             optimizer.zero_grad()
@@ -169,7 +169,7 @@ def train(args, snapshot_path):
             writer.add_scalar('info/total_loss', loss, iter_num)
             writer.add_scalar('info/consistency_weight', consistency_weight, iter_num)
             writer.add_scalar('info/loss_ce', loss_ce, iter_num)
-            if iter_num % 200 == 0:
+            if iter_num % 200 ==0:
                 logging.info(
                 'iteration %d : loss : %f, loss_ce: %f, loss_pse_sup: %f, alpha: %f' %
                 (iter_num, loss.item(), loss_ce.item(), loss_pse_sup.item(), alpha))
