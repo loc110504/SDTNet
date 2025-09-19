@@ -28,7 +28,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--root_path', type=str,
                     default='../../data/MSCMR', help='Name of Experiment')
 parser.add_argument('--exp', type=str,
-                    default='MSCMR_ScribbleVS', help='experiment_name')
+                    default='ScribbleVS', help='experiment_name')
 parser.add_argument('--data', type=str,
                     default='MSCMR', help='experiment_name')
 parser.add_argument('--tau', type=float,
@@ -42,7 +42,7 @@ parser.add_argument('--model', type=str,
 parser.add_argument('--num_classes', type=int,  default=4,
                     help='output channel of network')
 parser.add_argument('--max_iterations', type=int,
-                    default=30000, help='maximum epoch number to train')
+                    default=60000, help='maximum epoch number to train')
 parser.add_argument('--batch_size', type=int, default=8,
                     help='batch_size per gpu')
 parser.add_argument('--deterministic', type=int,  default=1,
