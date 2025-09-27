@@ -13,27 +13,25 @@ import torch
 import torch.backends.cudnn as cudnn
 import torch.optim as optim
 from tensorboardX import SummaryWriter
-
+import torch.nn.functional as F
 from torch.nn.modules.loss import CrossEntropyLoss
 from torch.utils.data import DataLoader
 from torchvision import transforms
 from tqdm import tqdm
-import torch.nn.functional as F
+
 from dataloader.acdc import BaseDataSets, RandomGenerator
 from networks.net_factory import net_factory
 from utils import losses, ramps
-from utils.Jigsaw import  exrct_boundary, BoundaryLoss
+from utils.Jigsaw import Cutout_min, Jigsaw, RandomBrightnessContrast, exrct_boundary, BoundaryLoss
 from val import test_single_volume_scribblevs
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--root_path', type=str,
                     default='../../data/ACDC', help='Name of Experiment')
 parser.add_argument('--exp', type=str,
-                    default='MeanTeacher+BAP_ACDC', help='experiment_name')
+                    default='TABNet', help='experiment_name')
 parser.add_argument('--data', type=str,
                     default='ACDC', help='experiment_name')
-parser.add_argument('--tau', type=float,
-                    default=0.5, help='experiment_name')
 parser.add_argument('--fold', type=str,
                     default='MAAGfold70', help='cross validation')
 parser.add_argument('--sup_type', type=str,
@@ -57,6 +55,7 @@ parser.add_argument('--gpu', type=str, default='0', help='GPU to use')
 args = parser.parse_args()
 os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
 
+
 def create_model(ema=False,num_classes=4):
     # Network definition
     net = net_factory(net_type=args.model, in_chns=1, class_num=num_classes)
@@ -66,29 +65,6 @@ def create_model(ema=False,num_classes=4):
             param.detach_()
     return model
 
-class WeightEMA(object):
-    def __init__(self, model, ema_model, alpha=0.999):
-        self.model = model
-        self.ema_model = ema_model
-        self.alpha = alpha
-        self.params = list(model.state_dict().values())
-        self.ema_params = list(ema_model.state_dict().values())
-        self.wd = 0.02 * 0.01
-        # self.wd = 0.02 * args.base_lr
-
-        for param, ema_param in zip(self.params, self.ema_params):
-            param.data.copy_(ema_param.data)
-
-    def step(self):
-
-        one_minus_alpha = 1.0 - self.alpha
-        for param, ema_param in zip(self.params, self.ema_params):
-            if ema_param.dtype == torch.float32:
-
-                ema_param.mul_(self.alpha)
-                ema_param.add_(param * one_minus_alpha)
-                # customized weight decay
-                param.mul_(1 - self.wd)
 
 def train(args, snapshot_path):
     base_lr = args.base_lr
@@ -96,7 +72,6 @@ def train(args, snapshot_path):
     batch_size = args.batch_size
     max_iterations = args.max_iterations
     model = create_model(ema=False,num_classes=4)
-    model_ema = create_model(ema=True, num_classes=4)
 
     db_train = BaseDataSets(base_dir=args.root_path, split="train", transform=transforms.Compose([
         RandomGenerator(args.patch_size)
@@ -113,70 +88,100 @@ def train(args, snapshot_path):
 
     model.train()
     optimizer = optim.Adam(model.parameters(), lr=0.0001, weight_decay=0.0001)
-    ema_optimizer = WeightEMA(model, model_ema, alpha=0.99)
     ce_loss = CrossEntropyLoss(ignore_index=4)
     dice_loss = losses.pDLoss(num_classes, ignore_index=4)
     bd_loss_fn = BoundaryLoss(iter_=1, weight_boundary=1.0)
 
     writer = SummaryWriter(snapshot_path + '/log')
     logging.info("{} iterations per epoch".format(len(trainloader)))
-    print(len(trainloader))
 
     iter_num = 0
     max_epoch = max_iterations // len(trainloader) + 1
     best_performance = 0.0
     iterator = tqdm(range(max_epoch), ncols=70)
     alpha = 1.0
+    K = 5
+    # hyperparams theo paper
+    lambda1 = 1.0  # TAS (CE nhánh i, j, k)
+    lambda2 = 0.3  # PL (Dice consistency với y_pl)
+    lambda3 = 0.1  # Boundary-aware loss
 
     for epoch_num in iterator:
-        for i_batch, sampled_batch in enumerate(trainloader):
-            volume_batch, label_batch = sampled_batch['image'], sampled_batch['label']
-            volume_batch, label_batch = volume_batch.cuda(), label_batch.cuda()
+        for i_batch, sampled in enumerate(trainloader):
 
+            # Get data
+            image = sampled['image'].cuda()   # (B,1,H,W)
+            scrib = sampled['label'].cuda()   # (B,H,W) integer; ignore_index=4
+            if scrib.dtype != torch.long:
+                scrib = scrib.long()
+
+            # 3 Augment
+            # Cutout
+            scrib = scrib.cuda(non_blocking=True)  
+            scrib_oh = F.one_hot(scrib.clamp(0, K-1), num_classes=K)          # (B,H,W,K)
+            scrib_oh = scrib_oh.permute(0, 3, 1, 2).contiguous().float()
+            img_i, labels_i_oh = Cutout_min(
+                imgs=image,
+                labels=scrib_oh,
+                device=image.device,
+                n_holes=1
+            ) 
+            scrib_i = torch.argmax(labels_i_oh, dim=1)
+            # Jigsaw
+            img_j, shuffle_idx = Jigsaw(image, num_x=2, num_y=2, shuffle_index=None)
+            # Intensity
+            img_k = RandomBrightnessContrast(image)
+            logits_i = model(img_i)   # (B,C,H,W)
+            logits_j_shuf = model(img_j)
+            logits_k = model(img_k)
+            logits_j, _ = Jigsaw(logits_j_shuf, num_x=2, num_y=2, shuffle_index=shuffle_idx)
+
+            y_i = torch.softmax(logits_i, dim=1)
+            y_j = torch.softmax(logits_j, dim=1)
+            y_k = torch.softmax(logits_k, dim=1)
+
+            # TAS loss
+            loss_ce_i = ce_loss(logits_i, scrib)
+            loss_ce_j = ce_loss(logits_j, scrib)
+            loss_ce_k = ce_loss(logits_k, scrib)
+            loss_TAS = loss_ce_i + loss_ce_j + loss_ce_k
+            # BAP
             with torch.no_grad():
-                ema_output = model_ema(volume_batch)
-                outputs_soft_ema = torch.softmax(ema_output, dim=1)
-            outputs = model(volume_batch)
-            outputs_soft1 = torch.softmax(outputs, dim=1)
-
-            loss_ce = ce_loss(outputs, label_batch.long())
-            loss_ce_pseudo = ce_loss(ema_output, label_batch.long())
-
-            with torch.no_grad():
-                denom = (loss_ce.detach() + loss_ce_pseudo.detach()).clamp_min(1e-8)
-                w_i = (loss_ce_pseudo.detach() / denom).item()
-                w_pseudo = (loss_ce.detach() / denom).item()
-
-            mixed_prob = w_i * outputs_soft1 + w_pseudo * outputs_soft_ema
+                denom = (loss_ce_j.detach() + loss_ce_k.detach()).clamp_min(1e-8)
+                w_j = (loss_ce_k.detach() / denom).item()
+                w_k = (loss_ce_j.detach() / denom).item()
+            mixed_prob = w_j * y_j + w_k * y_k 
             y_pl = torch.argmax(mixed_prob.detach(), dim=1)  
-            loss_PL = dice_loss(outputs_soft1, y_pl.unsqueeze(1)) + dice_loss(outputs_soft_ema, y_pl.unsqueeze(1))
+            loss_PL = dice_loss(y_j, y_pl.unsqueeze(1)) + dice_loss(y_k, y_pl.unsqueeze(1))
 
             y_pl_oh = F.one_hot(y_pl, num_classes=num_classes).permute(0, 3, 1, 2).float()
             B_pl = exrct_boundary(y_pl_oh, iter_=1)
-            B_i  = exrct_boundary(outputs_soft1,  iter_=1)
-            B_j  = exrct_boundary(outputs_soft_ema,  iter_=1)
-            loss_BD = bd_loss_fn(B_j, B_pl.detach()) + bd_loss_fn(B_i, B_pl.detach())
+            B_j  = exrct_boundary(y_j,  iter_=1)
+            B_k  = exrct_boundary(y_k,  iter_=1)    
+            loss_BD = bd_loss_fn(B_j, B_pl.detach()) + bd_loss_fn(B_k, B_pl.detach())
 
-            loss_pse_sup = (loss_PL * 0.3)
-            loss = loss_ce + loss_pse_sup + 0.1 * loss_BD
+            # Total loss
+            loss = lambda1 * loss_TAS + lambda2 * loss_PL + lambda3 * loss_BD
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
-            ema_optimizer.step()
+
             lr_ = base_lr * (1.0 - iter_num / max_iterations) ** 0.9
             for param_group in optimizer.param_groups:
                 param_group['lr'] = lr_
 
             iter_num = iter_num + 1
-            writer.add_scalar('info/lr', lr_, iter_num)
-            writer.add_scalar('info/total_loss', loss, iter_num)
-            writer.add_scalar('info/loss_ce', loss_ce, iter_num)
-            if iter_num % 200 == 0:
-                logging.info(
-                'iteration %d : loss : %f, loss_ce: %f, loss_pse_sup: %f, alpha: %f' %
-                (iter_num, loss.item(), loss_ce.item(), loss_pse_sup.item(), alpha))
+            writer.add_scalar("train/loss_total", loss.item(), iter_num)
+            writer.add_scalar("train/loss_TAS_ce", loss_TAS.item(), iter_num)
+            writer.add_scalar("train/loss_PL_dice", loss_PL.item(), iter_num)
+            writer.add_scalar("train/loss_BD", loss_BD.item(), iter_num)
 
-            if iter_num > 1 and iter_num % 200 == 0:
+            if iter_num % 400 == 0:
+                logging.info(
+                'iteration %d : loss : %f, loss_TAS: %f, loss_PL: %f, loss_BD: %f' 
+                % (iter_num, loss.item(), loss_TAS.item(), loss_PL.item(), loss_BD.item()))
+
+            if iter_num > 1 and iter_num % 400 == 0:
                 model.eval()
                 metric_list = 0.0
                 for i_batch, sampled_batch in enumerate(valloader):
