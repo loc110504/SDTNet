@@ -24,7 +24,7 @@ from torch.utils.data import DataLoader
 from torchvision import transforms
 from tqdm import tqdm
 from utils import losses, ramps
-from dataloader.acdc import BaseDataSets, RandomGenerator
+from dataloader.mscmr import MSCMRDataSets, RandomGenerator
 from utils.Jigsaw import  exrct_boundary, BoundaryLoss
 from networks.net_factory import net_factory
 from val_2D import test_all_case_2D
@@ -34,9 +34,9 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--root_path', type=str,
-                        default='../../data/ACDC', help='Data root path')
+                        default='../../data/MSCMR', help='Data root path')
     parser.add_argument('--data_name', type=str,
-                        default='ACDC', help='Data name')  
+                        default='MSCMR', help='Data name')  
     parser.add_argument('--model', type=str,
                         default='unet_cct', help='model_name, select: unet_cct, \
                             NestedUNet2d_2dual, swinunet_2dual')
@@ -88,9 +88,9 @@ def train(args, snapshot_path):
     logging.info("model_parameter:{}M".format(round(model_parameter / (1024*1024),2)))
 
     # create Dataset
-    db_train = BaseDataSets( base_dir=args.root_path, split="train", transform=transforms.Compose(
+    db_train = MSCMRDataSets( base_dir=args.root_path, split="train", transform=transforms.Compose(
                             [RandomGenerator(args.patch_size)]), fold=args.fold, sup_type=args.sup_type)
-    db_val = BaseDataSets(base_dir=args.root_path, fold=args.fold, split="val")
+    db_val = MSCMRDataSets(base_dir=args.root_path, fold=args.fold, split="val")
 
     random.seed(args.seed)
     np.random.seed(args.seed)
