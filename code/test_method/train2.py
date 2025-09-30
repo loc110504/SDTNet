@@ -164,7 +164,7 @@ def train(args, snapshot_path):
             alpha = random.random() + 1e-10
 
             # total loss
-            loss = loss_ce + 8.0 * loss_pse_sup_soft
+            loss = loss_ce + 0.3 * loss_pse_sup_soft + 0.1 * loss_BD
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
