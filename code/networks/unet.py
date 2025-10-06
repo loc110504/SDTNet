@@ -147,6 +147,42 @@ class Decoder(nn.Module):
         output = self.out_conv(x)
         return output
 
+class Decoder_HL(nn.Module):
+    def __init__(self, params):
+        super(Decoder_HL, self).__init__()
+        self.params = params
+        self.in_chns = self.params['in_chns']
+        self.ft_chns = self.params['feature_chns']
+        self.n_class = self.params['class_num']
+        self.bilinear = self.params['bilinear']
+        assert (len(self.ft_chns) == 5)
+
+        self.up1 = UpBlock(
+            self.ft_chns[4], self.ft_chns[3], self.ft_chns[3], dropout_p=0.0)
+        self.up2 = UpBlock(
+            self.ft_chns[3], self.ft_chns[2], self.ft_chns[2], dropout_p=0.0)
+        self.up3 = UpBlock(
+            self.ft_chns[2], self.ft_chns[1], self.ft_chns[1], dropout_p=0.0)
+        self.up4 = UpBlock(
+            self.ft_chns[1], self.ft_chns[0], self.ft_chns[0], dropout_p=0.0)
+
+        self.out_conv = nn.Conv2d(self.ft_chns[0], self.n_class,
+                                  kernel_size=3, padding=1)
+
+    def forward(self, feature):
+        x0 = feature[0]
+        x1 = feature[1]
+        x2 = feature[2]
+        x3 = feature[3]
+        x4 = feature[4]
+
+        x = self.up1(x4, x3)
+        x = self.up2(x, x2)
+        x = self.up3(x, x1)
+        x_last = self.up4(x, x0)
+        output = self.out_conv(x_last)
+        return output, x4, x_last
+
 
 class Decoder_DS(nn.Module): 
     def __init__(self, params):
@@ -295,22 +331,6 @@ class FeatureNoise(nn.Module):
         return x
 
 
-class FeatureNoise(nn.Module):
-    def __init__(self, uniform_range=0.3):
-        super(FeatureNoise, self).__init__()
-        self.uni_dist = Uniform(-uniform_range, uniform_range)
-
-    def feature_based_noise(self, x):
-        noise_vector = self.uni_dist.sample(
-            x.shape[1:]).to(x.device).unsqueeze(0)
-        x_noise = x.mul(noise_vector) + x
-        return x_noise
-
-    def forward(self, x):
-        x = self.feature_based_noise(x)
-        return x
-
-
 class UNet(nn.Module):
     def __init__(self, in_chns, class_num):
         super(UNet, self).__init__()
@@ -329,6 +349,25 @@ class UNet(nn.Module):
         feature = self.encoder(x)
         output = self.decoder(feature)
         return output
+
+class UNet_HL(nn.Module):
+    def __init__(self, in_chns, class_num):
+        super(UNet_HL, self).__init__()
+
+        params = {'in_chns': in_chns,
+                  'feature_chns': [16, 32, 64, 128, 256],
+                  'dropout': [0.05, 0.1, 0.2, 0.3, 0.5],
+                  'class_num': class_num,
+                  'bilinear': False,
+                  'acti_func': 'relu'}
+
+        self.encoder = Encoder(params)
+        self.decoder = Decoder_HL(params)
+
+    def forward(self, x):
+        feature = self.encoder(x)
+        output, high_features1, low_features1 = self.decoder(feature)
+        return output, high_features1, low_features1
 
 
 class UNet_CCT(nn.Module): 
