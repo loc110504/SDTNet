@@ -1,0 +1,165 @@
+Namespace(root_path='../../data/MSCMR', exp='Dual_Teacher', data='MSCMR', sup_type='scribble', model='unet_hl', num_classes=4, max_iterations=30000, batch_size=8, deterministic=1, base_lr=0.01, patch_size=[256, 256], seed=2022, gpu='0', consistency_rampup=40, tau=0.5)
+total 382 samples
+total 5 samples
+48 iterations per epoch
+  1%|▍                              | 8/626 [01:10<1:31:08,  8.85s/it]iteration 400 : loss : 0.175065, loss_pseudo_label: 0.227465
+iteration 400 : mean_dice : 0.516537 mean_hd95 : 191.639946
+  3%|▊                             | 16/626 [02:36<1:33:26,  9.19s/it]iteration 800 : loss : 0.135938, loss_pseudo_label: 0.220431
+iteration 800 : mean_dice : 0.569899 mean_hd95 : 200.037004
+  4%|█▏                            | 24/626 [04:01<1:32:35,  9.23s/it]iteration 1200 : loss : 0.121771, loss_pseudo_label: 0.220940
+iteration 1200 : mean_dice : 0.685758 mean_hd95 : 189.316244
+  5%|█▌                            | 33/626 [05:34<1:29:33,  9.06s/it]iteration 1600 : loss : 0.110445, loss_pseudo_label: 0.143838
+iteration 1600 : mean_dice : 0.643721 mean_hd95 : 196.284350
+  7%|█▉                            | 41/626 [06:59<1:29:36,  9.19s/it]iteration 2000 : loss : 0.061006, loss_pseudo_label: 0.110179
+iteration 2000 : mean_dice : 0.738339 mean_hd95 : 191.022245
+  8%|██▎                           | 49/626 [08:24<1:28:39,  9.22s/it]iteration 2400 : loss : 0.078860, loss_pseudo_label: 0.150746
+iteration 2400 : mean_dice : 0.662827 mean_hd95 : 198.775476
+  9%|██▊                           | 58/626 [09:57<1:25:56,  9.08s/it]iteration 2800 : loss : 0.064285, loss_pseudo_label: 0.122108
+iteration 2800 : mean_dice : 0.723066 mean_hd95 : 189.347805
+ 10%|██▉                           | 62/626 [10:46<1:36:41, 10.29s/it]save model to ../../checkpoints/MSCMR_Dual_Teacher/iter_3000.pth
+ 11%|███▏                          | 66/626 [11:22<1:25:45,  9.19s/it]iteration 3200 : loss : 0.050775, loss_pseudo_label: 0.108745
+iteration 3200 : mean_dice : 0.799573 mean_hd95 : 160.962024
+ 12%|███▌                          | 74/626 [12:46<1:24:51,  9.22s/it]iteration 3600 : loss : 0.079929, loss_pseudo_label: 0.108518
+iteration 3600 : mean_dice : 0.801641 mean_hd95 : 153.266405
+ 13%|███▉                          | 83/626 [14:20<1:21:54,  9.05s/it]iteration 4000 : loss : 0.065458, loss_pseudo_label: 0.093919
+iteration 4000 : mean_dice : 0.774563 mean_hd95 : 139.359865
+ 15%|████▎                         | 91/626 [15:44<1:21:53,  9.18s/it]iteration 4400 : loss : 0.068822, loss_pseudo_label: 0.058927
+iteration 4400 : mean_dice : 0.796263 mean_hd95 : 90.751465
+ 16%|████▋                         | 99/626 [17:08<1:21:01,  9.22s/it]iteration 4800 : loss : 0.063766, loss_pseudo_label: 0.073409
+iteration 4800 : mean_dice : 0.823802 mean_hd95 : 138.615637
+ 17%|█████                        | 108/626 [18:41<1:18:04,  9.04s/it]iteration 5200 : loss : 0.083281, loss_pseudo_label: 0.058813
+iteration 5200 : mean_dice : 0.846844 mean_hd95 : 62.637982
+ 19%|█████▎                       | 116/626 [20:05<1:17:56,  9.17s/it]iteration 5600 : loss : 0.052060, loss_pseudo_label: 0.054391
+iteration 5600 : mean_dice : 0.847593 mean_hd95 : 85.678271
+ 20%|█████▋                       | 124/626 [21:30<1:17:08,  9.22s/it]iteration 6000 : loss : 0.057489, loss_pseudo_label: 0.035277
+iteration 6000 : mean_dice : 0.865988 mean_hd95 : 27.556312
+save model to ../../checkpoints/MSCMR_Dual_Teacher/iter_6000.pth
+ 21%|██████▏                      | 133/626 [23:02<1:14:20,  9.05s/it]iteration 6400 : loss : 0.108566, loss_pseudo_label: 0.072613
+iteration 6400 : mean_dice : 0.860710 mean_hd95 : 49.591447
+ 23%|██████▌                      | 141/626 [24:26<1:14:22,  9.20s/it]iteration 6800 : loss : 0.048147, loss_pseudo_label: 0.047663
+iteration 6800 : mean_dice : 0.841285 mean_hd95 : 6.280811
+ 24%|██████▉                      | 149/626 [25:50<1:13:04,  9.19s/it]iteration 7200 : loss : 0.136614, loss_pseudo_label: 0.076059
+iteration 7200 : mean_dice : 0.845864 mean_hd95 : 47.065978
+ 25%|███████▎                     | 158/626 [27:23<1:10:36,  9.05s/it]iteration 7600 : loss : 0.044812, loss_pseudo_label: 0.031155
+iteration 7600 : mean_dice : 0.865011 mean_hd95 : 6.218008
+ 27%|███████▋                     | 166/626 [28:47<1:10:38,  9.21s/it]iteration 8000 : loss : 0.063875, loss_pseudo_label: 0.024039
+iteration 8000 : mean_dice : 0.873127 mean_hd95 : 6.827363
+ 28%|████████                     | 174/626 [30:12<1:09:44,  9.26s/it]iteration 8400 : loss : 0.043107, loss_pseudo_label: 0.032955
+iteration 8400 : mean_dice : 0.876437 mean_hd95 : 7.475871
+ 29%|████████▍                    | 183/626 [31:44<1:07:08,  9.09s/it]iteration 8800 : loss : 0.082503, loss_pseudo_label: 0.053199
+iteration 8800 : mean_dice : 0.870212 mean_hd95 : 5.929302
+ 30%|████████▋                    | 187/626 [32:33<1:14:35, 10.19s/it]save model to ../../checkpoints/MSCMR_Dual_Teacher/iter_9000.pth
+ 31%|████████▊                    | 191/626 [33:08<1:06:51,  9.22s/it]iteration 9200 : loss : 0.072270, loss_pseudo_label: 0.034765
+iteration 9200 : mean_dice : 0.864353 mean_hd95 : 6.215059
+ 32%|█████████▏                   | 199/626 [34:32<1:05:37,  9.22s/it]iteration 9600 : loss : 0.097082, loss_pseudo_label: 0.035528
+iteration 9600 : mean_dice : 0.877986 mean_hd95 : 4.152139
+ 33%|█████████▋                   | 208/626 [36:05<1:03:12,  9.07s/it]iteration 10000 : loss : 0.047116, loss_pseudo_label: 0.028145
+iteration 10000 : mean_dice : 0.874763 mean_hd95 : 14.654520
+ 35%|██████████                   | 216/626 [37:29<1:02:54,  9.21s/it]iteration 10400 : loss : 0.113089, loss_pseudo_label: 0.051941
+iteration 10400 : mean_dice : 0.874072 mean_hd95 : 5.834445
+ 36%|██████████▍                  | 224/626 [38:53<1:01:51,  9.23s/it]iteration 10800 : loss : 0.074230, loss_pseudo_label: 0.055371
+iteration 10800 : mean_dice : 0.873302 mean_hd95 : 13.349432
+ 37%|███████████▌                   | 233/626 [40:26<59:24,  9.07s/it]iteration 11200 : loss : 0.073206, loss_pseudo_label: 0.034177
+iteration 11200 : mean_dice : 0.868276 mean_hd95 : 4.355714
+ 38%|███████████▉                   | 241/626 [41:50<59:03,  9.21s/it]iteration 11600 : loss : 0.139900, loss_pseudo_label: 0.052696
+iteration 11600 : mean_dice : 0.878546 mean_hd95 : 11.679690
+ 40%|████████████▎                  | 249/626 [43:14<57:59,  9.23s/it]iteration 12000 : loss : 0.043059, loss_pseudo_label: 0.027178
+iteration 12000 : mean_dice : 0.879579 mean_hd95 : 5.194328
+save model to ../../checkpoints/MSCMR_Dual_Teacher/iter_12000.pth
+ 41%|████████████▊                  | 258/626 [44:46<55:34,  9.06s/it]iteration 12400 : loss : 0.081516, loss_pseudo_label: 0.038131
+iteration 12400 : mean_dice : 0.860049 mean_hd95 : 45.096666
+ 42%|█████████████▏                 | 266/626 [46:10<55:19,  9.22s/it]iteration 12800 : loss : 0.073752, loss_pseudo_label: 0.028551
+iteration 12800 : mean_dice : 0.880005 mean_hd95 : 2.248233
+ 44%|█████████████▌                 | 274/626 [47:34<54:05,  9.22s/it]iteration 13200 : loss : 0.079996, loss_pseudo_label: 0.036475
+iteration 13200 : mean_dice : 0.867618 mean_hd95 : 2.551087
+ 45%|██████████████                 | 283/626 [49:07<51:52,  9.07s/it]iteration 13600 : loss : 0.074285, loss_pseudo_label: 0.043615
+iteration 13600 : mean_dice : 0.869483 mean_hd95 : 2.598436
+ 46%|██████████████▍                | 291/626 [50:31<51:23,  9.20s/it]iteration 14000 : loss : 0.056772, loss_pseudo_label: 0.037500
+iteration 14000 : mean_dice : 0.883287 mean_hd95 : 6.010192
+ 48%|██████████████▊                | 299/626 [51:54<50:19,  9.23s/it]iteration 14400 : loss : 0.050097, loss_pseudo_label: 0.030425
+iteration 14400 : mean_dice : 0.867703 mean_hd95 : 2.642983
+ 49%|███████████████▎               | 308/626 [53:27<48:05,  9.07s/it]iteration 14800 : loss : 0.093744, loss_pseudo_label: 0.051599
+iteration 14800 : mean_dice : 0.829374 mean_hd95 : 67.107328
+ 50%|███████████████▍               | 312/626 [54:15<53:20, 10.19s/it]save model to ../../checkpoints/MSCMR_Dual_Teacher/iter_15000.pth
+ 50%|███████████████▋               | 316/626 [54:51<47:34,  9.21s/it]iteration 15200 : loss : 0.061746, loss_pseudo_label: 0.026806
+iteration 15200 : mean_dice : 0.879983 mean_hd95 : 2.413282
+ 52%|████████████████               | 324/626 [56:15<46:28,  9.23s/it]iteration 15600 : loss : 0.075884, loss_pseudo_label: 0.040816
+iteration 15600 : mean_dice : 0.883558 mean_hd95 : 2.282022
+ 53%|████████████████▍              | 333/626 [57:48<44:21,  9.08s/it]iteration 16000 : loss : 0.077948, loss_pseudo_label: 0.036862
+iteration 16000 : mean_dice : 0.876776 mean_hd95 : 11.983665
+ 54%|████████████████▉              | 341/626 [59:12<43:43,  9.20s/it]iteration 16400 : loss : 0.053392, loss_pseudo_label: 0.033427
+iteration 16400 : mean_dice : 0.881259 mean_hd95 : 4.751193
+ 56%|████████████████▏            | 349/626 [1:00:36<42:39,  9.24s/it]iteration 16800 : loss : 0.093667, loss_pseudo_label: 0.038188
+iteration 16800 : mean_dice : 0.877531 mean_hd95 : 2.416937
+ 57%|████████████████▌            | 358/626 [1:02:09<40:31,  9.07s/it]iteration 17200 : loss : 0.078985, loss_pseudo_label: 0.038637
+iteration 17200 : mean_dice : 0.878288 mean_hd95 : 2.472191
+ 58%|████████████████▉            | 366/626 [1:03:33<39:50,  9.19s/it]iteration 17600 : loss : 0.065019, loss_pseudo_label: 0.029235
+iteration 17600 : mean_dice : 0.885029 mean_hd95 : 2.192920
+ 60%|█████████████████▎           | 374/626 [1:04:57<38:44,  9.23s/it]iteration 18000 : loss : 0.064954, loss_pseudo_label: 0.037488
+iteration 18000 : mean_dice : 0.878886 mean_hd95 : 6.047365
+save model to ../../checkpoints/MSCMR_Dual_Teacher/iter_18000.pth
+ 61%|█████████████████▋           | 383/626 [1:06:29<36:44,  9.07s/it]iteration 18400 : loss : 0.052979, loss_pseudo_label: 0.034054
+iteration 18400 : mean_dice : 0.872616 mean_hd95 : 2.451055
+ 62%|██████████████████           | 391/626 [1:07:53<36:01,  9.20s/it]iteration 18800 : loss : 0.093523, loss_pseudo_label: 0.052948
+iteration 18800 : mean_dice : 0.855027 mean_hd95 : 58.187029
+ 64%|██████████████████▍          | 399/626 [1:09:18<35:00,  9.25s/it]iteration 19200 : loss : 0.050272, loss_pseudo_label: 0.028129
+iteration 19200 : mean_dice : 0.881598 mean_hd95 : 2.233562
+ 65%|██████████████████▉          | 408/626 [1:10:50<32:58,  9.08s/it]iteration 19600 : loss : 0.084916, loss_pseudo_label: 0.044364
+iteration 19600 : mean_dice : 0.882623 mean_hd95 : 2.204083
+ 66%|███████████████████▎         | 416/626 [1:12:14<32:14,  9.21s/it]iteration 20000 : loss : 0.054238, loss_pseudo_label: 0.027256
+iteration 20000 : mean_dice : 0.885272 mean_hd95 : 2.153001
+ 68%|███████████████████▋         | 424/626 [1:13:38<31:05,  9.24s/it]iteration 20400 : loss : 0.072190, loss_pseudo_label: 0.043817
+iteration 20400 : mean_dice : 0.876817 mean_hd95 : 4.868095
+ 69%|████████████████████         | 433/626 [1:15:11<29:13,  9.08s/it]iteration 20800 : loss : 0.077252, loss_pseudo_label: 0.036603
+iteration 20800 : mean_dice : 0.875126 mean_hd95 : 2.475608
+ 70%|████████████████████▏        | 437/626 [1:15:59<32:05, 10.19s/it]save model to ../../checkpoints/MSCMR_Dual_Teacher/iter_21000.pth
+ 70%|████████████████████▍        | 441/626 [1:16:35<28:25,  9.22s/it]iteration 21200 : loss : 0.036029, loss_pseudo_label: 0.022451
+iteration 21200 : mean_dice : 0.890777 mean_hd95 : 2.046856
+ 72%|████████████████████▊        | 449/626 [1:17:59<27:15,  9.24s/it]iteration 21600 : loss : 0.045435, loss_pseudo_label: 0.026166
+iteration 21600 : mean_dice : 0.875010 mean_hd95 : 2.456032
+ 73%|█████████████████████▏       | 458/626 [1:19:32<25:25,  9.08s/it]iteration 22000 : loss : 0.057008, loss_pseudo_label: 0.029088
+iteration 22000 : mean_dice : 0.880793 mean_hd95 : 2.721395
+ 74%|█████████████████████▌       | 466/626 [1:20:56<24:31,  9.20s/it]iteration 22400 : loss : 0.056320, loss_pseudo_label: 0.024651
+iteration 22400 : mean_dice : 0.879033 mean_hd95 : 2.484294
+ 76%|█████████████████████▉       | 474/626 [1:22:20<23:17,  9.20s/it]iteration 22800 : loss : 0.072558, loss_pseudo_label: 0.029642
+iteration 22800 : mean_dice : 0.873884 mean_hd95 : 16.081120
+ 77%|██████████████████████▍      | 483/626 [1:23:53<21:39,  9.09s/it]iteration 23200 : loss : 0.095804, loss_pseudo_label: 0.042726
+iteration 23200 : mean_dice : 0.867988 mean_hd95 : 5.995124
+ 78%|██████████████████████▋      | 491/626 [1:25:17<20:44,  9.22s/it]iteration 23600 : loss : 0.045579, loss_pseudo_label: 0.030810
+iteration 23600 : mean_dice : 0.891317 mean_hd95 : 2.226405
+ 80%|███████████████████████      | 499/626 [1:26:42<19:35,  9.25s/it]iteration 24000 : loss : 0.051683, loss_pseudo_label: 0.035933
+iteration 24000 : mean_dice : 0.881594 mean_hd95 : 8.629503
+save model to ../../checkpoints/MSCMR_Dual_Teacher/iter_24000.pth
+ 81%|███████████████████████▌     | 508/626 [1:28:14<17:49,  9.06s/it]iteration 24400 : loss : 0.056161, loss_pseudo_label: 0.027436
+iteration 24400 : mean_dice : 0.873278 mean_hd95 : 2.805462
+ 82%|███████████████████████▉     | 516/626 [1:29:38<16:52,  9.21s/it]iteration 24800 : loss : 0.065053, loss_pseudo_label: 0.028649
+iteration 24800 : mean_dice : 0.870730 mean_hd95 : 5.522936
+ 84%|████████████████████████▎    | 524/626 [1:31:02<15:40,  9.23s/it]iteration 25200 : loss : 0.041357, loss_pseudo_label: 0.027591
+iteration 25200 : mean_dice : 0.870497 mean_hd95 : 9.173050
+ 85%|████████████████████████▋    | 533/626 [1:32:35<14:03,  9.07s/it]iteration 25600 : loss : 0.048819, loss_pseudo_label: 0.027969
+iteration 25600 : mean_dice : 0.874698 mean_hd95 : 6.258967
+ 86%|█████████████████████████    | 541/626 [1:33:59<13:03,  9.21s/it]iteration 26000 : loss : 0.054771, loss_pseudo_label: 0.034106
+iteration 26000 : mean_dice : 0.862020 mean_hd95 : 14.796177
+ 88%|█████████████████████████▍   | 549/626 [1:35:23<11:51,  9.24s/it]iteration 26400 : loss : 0.051099, loss_pseudo_label: 0.028765
+iteration 26400 : mean_dice : 0.887533 mean_hd95 : 2.024132
+ 89%|█████████████████████████▊   | 558/626 [1:36:56<10:17,  9.08s/it]iteration 26800 : loss : 0.054036, loss_pseudo_label: 0.023769
+iteration 26800 : mean_dice : 0.885781 mean_hd95 : 2.196299
+ 90%|██████████████████████████   | 562/626 [1:37:44<10:51, 10.19s/it]save model to ../../checkpoints/MSCMR_Dual_Teacher/iter_27000.pth
+ 90%|██████████████████████████▏  | 566/626 [1:38:19<09:11,  9.20s/it]iteration 27200 : loss : 0.044198, loss_pseudo_label: 0.023572
+iteration 27200 : mean_dice : 0.878361 mean_hd95 : 2.259454
+ 92%|██████████████████████████▌  | 574/626 [1:39:44<08:00,  9.24s/it]iteration 27600 : loss : 0.043456, loss_pseudo_label: 0.023600
+iteration 27600 : mean_dice : 0.887980 mean_hd95 : 6.827130
+ 93%|███████████████████████████  | 583/626 [1:41:16<06:29,  9.06s/it]iteration 28000 : loss : 0.033956, loss_pseudo_label: 0.025585
+iteration 28000 : mean_dice : 0.889343 mean_hd95 : 2.162605
+ 94%|███████████████████████████▍ | 591/626 [1:42:40<05:22,  9.21s/it]iteration 28400 : loss : 0.035014, loss_pseudo_label: 0.025516
+iteration 28400 : mean_dice : 0.887070 mean_hd95 : 4.459723
+ 96%|███████████████████████████▋ | 599/626 [1:44:04<04:09,  9.24s/it]iteration 28800 : loss : 0.036365, loss_pseudo_label: 0.025477
+iteration 28800 : mean_dice : 0.888937 mean_hd95 : 4.282754
+ 97%|████████████████████████████▏| 608/626 [1:45:37<02:43,  9.08s/it]iteration 29200 : loss : 0.043071, loss_pseudo_label: 0.028522
+iteration 29200 : mean_dice : 0.881772 mean_hd95 : 2.322197
+ 98%|████████████████████████████▌| 616/626 [1:47:00<01:32,  9.20s/it]iteration 29600 : loss : 0.048314, loss_pseudo_label: 0.032670
+iteration 29600 : mean_dice : 0.886356 mean_hd95 : 7.093802
+100%|████████████████████████████▉| 624/626 [1:48:24<00:18,  9.23s/it]iteration 30000 : loss : 0.060116, loss_pseudo_label: 0.043388
+iteration 30000 : mean_dice : 0.880270 mean_hd95 : 4.233036
+save model to ../../checkpoints/MSCMR_Dual_Teacher/iter_30000.pth
+100%|████████████████████████████▉| 624/626 [1:48:47<00:20, 10.46s/it]

@@ -1,6 +1,5 @@
-# SDTNet
-Code implementation for:
-### Overall Framework:
+# SDTNet: Dynamic Teacher Switching with Hierarchical Consistency for Scribble-Supervised Medical Image Segmentation
+Code implementation for our paper: SDTNet: Dynamic Teacher Switching with Hierarchical Consistency for Scribble-Supervised Medical Image Segmentation
 ![Training Process](framework.png)
 
 # Datasets
@@ -28,12 +27,20 @@ Install packages:
 pip install -r requirements.txt
 ```
 # Usage
-Move to the training folder and execute the script:
+For training:
 
 ```bash
 cd code/train
 bash run.sh
 ```
+
+For testing:
+```bash
+cd code/test
+python test_acdc.py # for ACDC dataset
+python test_mscmr.py # for MSCMRseg dataset
+```
+
 ### ⚙️ Configuration
 The `run.sh` file contains several configurable parameters for training experiments, such as:
 - Dataset path and type (e.g., ACDC, MSCMR)
@@ -78,4 +85,4 @@ You can modify these arguments in `run.sh` to adjust the training setup for your
 ```
 
 # Acknowledgement
-We gratefully acknowledge the public release of [WSL4MIS](https://github.com/HiLab-git/WSL4MIS) and [ShapePU](https://github.com/BWGZK/ShapePU) for part of their codes, processed datasets and data splits.# scribble_code
+We gratefully acknowledge the public release of [WSL4MIS](https://github.com/HiLab-git/WSL4MIS) and [CycleMix](https://github.com/BWGZK/CycleMix) for part of their codes, processed datasets and data splits.
