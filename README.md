@@ -1,8 +1,10 @@
-# SDTNet: Dynamic Teacher Switching with Hierarchical Consistency for Scribble-Supervised Medical Image Segmentation
-- This is the overall framework:
+# SDT-Net: Dynamic Teacher Switching with Hierarchical Consistency for Scribble-Supervised Medical Image Segmentation
+Official code implementation of "SDT-Net: Dynamic Teacher Switching with Hierarchical Consistency for Scribble-Supervised Medical Image Segmentation"
+## Introduction
+Scribble-supervised methods have emerged to mitigate the prohibitive annotation burden in medical image segmentation. However, the inherent sparsity of these annotations introduces significant ambiguity, which results in noisy pseudo-label propagation and hinders the learning of robust anatomical boundaries. To address this challenge, we propose SDTNet, a novel dual-teacher, single-student framework designed to maximize supervision quality from these weak signals. Our method features a Dynamic Teacher Switching (DTS) module to adaptively select the most reliable teacher. This selected teacher then guides the student via two synergistic mechanisms: high-confidence pseudo-labels, refined by a Pick Reliable Pixels (PRP) mechanism, and multi-level feature alignment, enforced by a Hierarchical Consistency (HiCo) module. Extensive experiments on the ACDC and MSCMRseg datasets demonstrate that SDTNet achieves state-of-the-art performance, producing more accurate and anatomically plausible segmentations.
 ![Training Process](framework.png)
 
-# Datasets
+## Datasets
 ### ❤️ ACDC Dataset
 - Mask Annotations: [ACDC](https://www.creatis.insa-lyon.fr/Challenge/acdc/) 
 - Scribble annotations: [ACDC scribbles](https://vios-s.github.io/multiscale-adversarial-attention-gates/data)
@@ -13,42 +15,42 @@
 
 > We have reorganized the datasets, and they are now available for download at: 👉 [Google Drive](https://drive.google.com/drive/folders/1OCPCEKdMr7Gh9v7xhSY5c_HF1e0TRkDL?usp=sharing)
 
-# Setup
-This code has been test with Python 3.10.18:
-Create environment:
+## Setup
+1. Clone this project and create a conda environment
 ```bash
-conda create -n env python=3.10.18
-conda activate env
+git clone https://github.com/loc110504/SDTNET.git
+cd SDTNET
+
+conda create -n sdtnet python=3.10.18
+conda activate sdtnet
 ```
-
-Install packages:
-
+2. Install requirements and packages
 ```bash
 pip install -r requirements.txt
 ```
-# Usage
-For training:
+## Usage
+### For training:
 
 ```bash
 cd code/train
 bash run.sh
 ```
 
-For testing:
+### For testing:
 ```bash
 cd code/test
 python test_acdc.py # for ACDC dataset
 python test_mscmr.py # for MSCMRseg dataset
 ```
 
-### ⚙️ Configuration
+### Configuration
 The `run.sh` file contains several configurable parameters for training experiments, such as:
 - Dataset path and type (e.g., ACDC, MSCMR)
 - Training hyperparameters like learning rate, batch size, and total iterations
 - Experimental settings such as seed, GPU index, and supervision type (e.g., scribble)
 You can modify these arguments in `run.sh` to adjust the training setup for your experiments.
 
-# Project Structure
+## Project Structure
 ```
 ├── 📁 code
 │   ├── 📁 dataloader
@@ -84,5 +86,5 @@ You can modify these arguments in `run.sh` to adjust the training setup for your
 └── 📄 requirements.txt
 ```
 
-# Acknowledgement
+## Acknowledgement
 We gratefully acknowledge the public release of [WSL4MIS](https://github.com/HiLab-git/WSL4MIS) and [CycleMix](https://github.com/BWGZK/CycleMix) for part of their codes, processed datasets and data splits.
