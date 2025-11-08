@@ -21,7 +21,7 @@ The overall framework of SDTNet:
 git clone https://github.com/loc110504/SDTNET.git
 cd SDTNET
 
-conda create -n sdtnet python=3.10.18
+conda create -n sdtnet python=3.10
 conda activate sdtnet
 ```
 2. Install requirements and packages
