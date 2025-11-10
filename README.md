@@ -1,4 +1,4 @@
-# SDTNet
+# SDT-Net
 Official code implementation of *"SDT-Net: Dynamic Teacher Switching with Hierarchical Consistency for Scribble-Supervised Medical Image Segmentation"*
 ### Introduction
 The overall framework of SDTNet:
