@@ -7,7 +7,6 @@ import sys
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) 
 sys.path.append(BASE_DIR) 
 
-from Scribble_DualTeachers.code.utils.pick_reliable_pixels import process_pseudo_label
 import numpy as np
 import torch
 import torch.backends.cudnn as cudnn
@@ -31,7 +30,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--root_path', type=str,
                     default='../../data/MSCMR', help='Name of Experiment')
 parser.add_argument('--exp', type=str,
-                    default='DualTeacher', help='experiment_name')
+                    default='SDTNet', help='experiment_name')
 parser.add_argument('--data', type=str,
                     default='MSCMR', help='experiment_name')
 parser.add_argument('--sup_type', type=str,
