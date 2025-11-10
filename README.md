@@ -1,21 +1,21 @@
-# SDT-Net
+# SDTNet
 Official code implementation of *"SDT-Net: Dynamic Teacher Switching with Hierarchical Consistency for Scribble-Supervised Medical Image Segmentation"*
 ### Introduction
 The overall framework of SDTNet:
 ![Training Process](framework.png)
 
-## Datasets
-### ❤️ ACDC Dataset
+### Datasets and Model Weights
+1. ACDC Dataset
 - Mask Annotations: [ACDC](https://www.creatis.insa-lyon.fr/Challenge/acdc/) 
 - Scribble annotations: [ACDC scribbles](https://vios-s.github.io/multiscale-adversarial-attention-gates/data)
-### 🫀 MSCMR Dataset
+2. MSCMR Dataset
 - Mask Annotations: [MSCMRseg](https://zmiclab.github.io/zxh/0/mscmrseg19/data.html)
 - Scribble annotations: [MSCMR_scribbles](https://github.com/BWGZK/CycleMix/tree/main/MSCMR_scribbles)
 - Scribble-annotated dataset for training: [MSCMR_dataset](https://github.com/BWGZK/CycleMix/tree/main/MSCMR_dataset). 
 
-> We have reorganized the datasets, and they are now available for download at: 👉 [Google Drive](https://drive.google.com/drive/folders/1OCPCEKdMr7Gh9v7xhSY5c_HF1e0TRkDL?usp=sharing)
+> We have organized the datasets and our model checkpoints, and they are now available for download at: 👉 [Google Drive](https://drive.google.com/drive/folders/1OCPCEKdMr7Gh9v7xhSY5c_HF1e0TRkDL?usp=sharing)
 
-## Setup
+### Setup
 1. Clone this project and create a conda environment
 ```bash
 git clone https://github.com/loc110504/SDTNET.git
@@ -28,52 +28,20 @@ conda activate sdtnet
 ```bash
 pip install -r requirements.txt
 ```
-## Usage
-### For training:
+### Usage
+1. For training:
 
 ```bash
 cd code/train
 bash run.sh
 ```
 
-### For testing:
+2. For testing:
 ```bash
 cd code/test
 python test_acdc.py # for ACDC dataset
 python test_mscmr.py # for MSCMRseg dataset
 ```
 
-### Configuration
-The `run.sh` file contains several configurable parameters for training experiments, such as:
-- Dataset path and type (e.g., ACDC, MSCMR)
-- Training hyperparameters like learning rate, batch size, and total iterations
-- Experimental settings such as seed, GPU index, and supervision type (e.g., scribble)
-You can modify these arguments in `run.sh` to adjust the training setup for your experiments.
-
-## Project Structure
-```
-├── 📁 code
-│   ├── 📁 dataloader
-│   │   ├── acdc.py
-│   │   └── mscmr.py
-│   ├── 📁 networks
-│   │   ├── net_factory.py
-│   │   └── unet.py
-│   ├── 📁 test
-│   │   ├── test_mscmr.py
-│   │   ├── test_acdc.py
-│   ├── 📁 train
-│   │   ├── run.sh
-│   │   ├── train_method_acdc.py
-│   │   └── train_method_mscmr.py
-│   ├── 📁 utils
-│   └── val.py
-|
-├── 📁 data
-│   ├── 📁 ACDC
-│   ├── 📁 MSCMR
-└── 📄 requirements.txt
-```
-
 ### Acknowledgement
-We gratefully acknowledge the public release of [WSL4MIS](https://github.com/HiLab-git/WSL4MIS) and [CycleMix](https://github.com/BWGZK/CycleMix) for part of their codes and processed dataset.
+We acknowledge the public release of [WSL4MIS](https://github.com/HiLab-git/WSL4MIS), [CycleMix](https://github.com/BWGZK/CycleMix) and [MAAG](https://github.com/gvalvano/multiscale-adversarial-attention-gates) for their codes and processed dataset.
