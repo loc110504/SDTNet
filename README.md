@@ -1,4 +1,14 @@
-# SDT-Net
+<div align="center">
+  <h1 style="
+    color:#4c6fff;
+    font-style:italic;
+    letter-spacing: 2px;
+    text-shadow: 0 0 8px rgba(76,111,255,0.6);
+  ">
+    SDT-Net
+  </h1>
+</div>
+
 Official code implementation of *"SDT-Net: Dynamic Teacher Switching with Hierarchical Consistency for Scribble-Supervised Medical Image Segmentation"*
 ### Introduction
 The overall framework of SDTNet:
