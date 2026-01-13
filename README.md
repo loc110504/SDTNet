@@ -2,7 +2,7 @@
   <img src="sdtnet.svg" width="350">
 </p>
 
-Official code implementation of *"SDT-Net: Dynamic Teacher Switching with Hierarchical Consistency for Scribble-Supervised Medical Image Segmentation"*
+Official code implementation for our IEEE ISBI 2026 paper: "Scribble-Supervised Medical Image Segmentation with Dynamic Teacher Switching and Hierarchical Consistency"
 ### Introduction
 The overall framework of SDTNet:
 ![Training Process](framework.png)
